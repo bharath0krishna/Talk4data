@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Language Query System</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            background-color: #001f3f; /* Dark Blue */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Fullscreen Intro */
+        .intro-screen {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background-color: #001f3f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-out;
+            z-index: 10;
+        }
+
+        /* Animated Title */
+        .intro-title {
+            font-size: 50px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transform: scale(0.8);
+            animation: zoomFadeIn 1.5s ease-out forwards;
+        }
+
+        @keyframes zoomFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Main App - Initially Hidden */
+        .main-app {
+            display: none;
+            width: 80%;
+            height: 60vh;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            background-color: #002855;
+            padding: 20px;
+            gap: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-section, .result-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #003366;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Query Input */
+        #queryBox {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #404040;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #queryBox:focus {
+            background-color: #555;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Submit Button */
+        #submitButton {
+            padding: 12px 25px;
+            font-size: 18px;
+            margin-top: 15px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        #submitButton:hover {
+            background-color: #0059b3;
+            transform: scale(1.05);
+        }
+
+        /* Table Styling */
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Screen -->
+    <div class="intro-screen">
+        <div class="intro-title">Talk4Data</div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-app" id="mainApp">
+        <div class="input-section">
+            <h2>Enter Query</h2>
+            <input type="text" id="queryBox" placeholder="Type your query here...">
+            <button id="submitButton">Submit</button>
+        </div>
+        <div class="result-section">
+            <table id="results" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                        <th>Column 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data 1</td>
+                        <td>Data 2</td>
+                        <td>Data 3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Show Main App After 2 Seconds
+        setTimeout(() => {
+            document.querySelector(".intro-screen").style.opacity = "0";
+            setTimeout(() => {
+                document.querySelector(".intro-screen").style.display = "none";
+                document.getElementById("mainApp").style.display = "flex";
+            }, 1000);
+        }, 2000);
+
+        // Handle Query Submission
+        document.getElementById("submitButton").addEventListener("click", function() {
+            let query = document.getElementById("queryBox").value;
+            if (query) {
+                document.getElementById("results").style.display = "table";
+            }
+        });
+    </script>
+
+</body>
+</html>
