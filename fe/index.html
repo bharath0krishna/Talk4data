@@ -138,18 +138,34 @@
         }
 
         .output-container {
-            width: 100%;
+            position: relative;
+            /* Make this the reference for absolute positioning */
+            padding: 38px;
             background-color: #002244;
-            padding: 12px;
             border-radius: 8px;
             color: #00c8ff;
             font-family: monospace;
             min-height: 50px;
             text-align: center;
             border: 1px solid #004080;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        #copyButton {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        #copyButton:hover {
+            background-color: #0059b3;
         }
 
         .result-section {
@@ -234,7 +250,7 @@
     <div class="sidebar" id="sidebar">
         <a href="#">🏠 Home</a>
         <a href="#">👤 User</a>
-        <a href="#" id="authLink">🔐 Login/Signup</a>
+        <a href="login.html" id="authLink">🔐 Login/Signup</a>
     </div>
 
     <!-- Hamburger Menu -->
@@ -250,13 +266,15 @@
         <div class="input-section">
             <div class="query-container">
                 <h2>Enter Query</h2>
-                <input type="text" id="queryBox" placeholder="Type your query here..."
-                    style="width: 80%; padding: 10px;">
+                <textarea type="text" id="queryBox" placeholder="Type your query here..."
+                    style="width: 80%; padding: 10px;"></textarea>
                 <button id="submitButton">Submit</button>
             </div>
             <div class="output-container" id="sqlOutput">
-                SQL Query will appear here...
+                <span id="sqlText">SQL Query will appear here...</span>
+                <button id="copyButton">📋 Copy</button>
             </div>
+
         </div>
         <div class="result-section">
             <table id="results" style="display: none;">
@@ -290,7 +308,7 @@
 
         document.getElementById("submitButton").addEventListener("click", function () {
             let query = document.getElementById("queryBox").value.trim();
-            let sqlOutput = document.getElementById("sqlOutput");
+            let sqlText = document.getElementById("sqlText");
             let resultsTable = document.getElementById("results");
 
             if (!query) {
@@ -299,50 +317,75 @@
             }
 
             // Simulated SQL generation (Replace with actual backend logic)
-            sqlOutput.innerText = `SELECT * FROM table WHERE column LIKE '%${query}%';`;
+            sqlText.innerText = `SELECT * FROM table WHERE column LIKE '%${query}%';`;
 
             // Show the results table
             resultsTable.style.display = "table";
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Simulate successful login
+            localStorage.setItem("isLoggedIn", "true");
+
+            // Redirect back to main page
+            window.location.href = "index.html";
         });
 
 
         // Live Update SQL Output as User Types
         document.getElementById("queryBox").addEventListener("input", function () {
             let query = this.value.trim();
-            let sqlOutput = document.getElementById("sqlOutput");
+            let sqlText = document.getElementById("sqlText");
 
             if (query.length === 0) {
-                sqlOutput.innerText = "SQL Query will appear here...";
+                sqlText.innerText = "SQL Query will appear here...";
                 return;
             }
 
             // Simulated SQL output (Replace with AI/NLP model output later)
-            sqlOutput.innerText = `SELECT * FROM table WHERE column LIKE '%${query}%';`;
+            sqlText.innerText = `SELECT * FROM table WHERE column LIKE '%${query}%';`;
         });
-
-        let isLoggedIn = false; // Change this based on authentication
 
         // Function to Toggle Sidebar
         function toggleSidebar() {
             let sidebar = document.getElementById("sidebar");
-            if (sidebar.style.left === "0px") {
-                sidebar.style.left = "-18%";
-            } else {
-                sidebar.style.left = "0px";
-            }
+            sidebar.style.left = (sidebar.style.left === "0px") ? "-18%" : "0px";
         }
 
-        // Update Login/Signup or Sign Out
+        // Copy SQL Query to Clipboard
+        document.getElementById("copyButton").addEventListener("click", function () {
+            let sqlOutputText = document.getElementById("sqlText").innerText;
+
+            // Copy text to clipboard
+            navigator.clipboard.writeText(sqlOutputText).then(() => {
+                alert("Copied to clipboard!");
+            }).catch(err => {
+                console.error("Error copying text: ", err);
+            });
+        });
+
+        // Handle Login/Signup or Sign Out
         document.addEventListener("DOMContentLoaded", function () {
             let authLink = document.getElementById("authLink");
+            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if user is logged in
+
             if (isLoggedIn) {
                 authLink.textContent = "🚪 Sign Out";
-                authLink.href = "#logout"; // Handle Logout
+                authLink.href = "#"; // Prevent redirection
+                authLink.addEventListener("click", function () {
+                    localStorage.setItem("isLoggedIn", "false"); // Set logout state
+                    location.reload(); // Refresh page to update UI
+                });
             } else {
                 authLink.textContent = "🔐 Login/Signup";
-                authLink.href = "#login"; // Handle Login
+                authLink.href = "login.html"; // Redirect to login page
             }
         });
+
+
+
     </script>
 
 </body>
