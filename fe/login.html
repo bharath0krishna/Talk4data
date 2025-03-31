@@ -92,7 +92,7 @@
             toggleForm.innerText = isSignup ? "Already have an account? Login" : "Don't have an account? Sign up";
         });
 
-        authButton.addEventListener("click", function () {
+        authButton.addEventListener("click", async function () {
             let username = usernameInput.value.trim();
             let password = passwordInput.value.trim();
 
@@ -101,13 +101,27 @@
                 return;
             }
 
-            // Simulated authentication (Replace with real backend authentication later)
-            alert(isSignup ? "Sign Up Successful! Redirecting..." : "Login Successful! Redirecting...");
+            let endpoint = isSignup ? "/register" : "/login";
 
-            // Redirect to main page after authentication
-            window.location.href = "index.html";
+            let response = await fetch(`http://127.0.0.1:5000${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+
+            let result = await response.json();
+
+            if (response.ok) {
+                sessionStorage.setItem("loggedIn", "true");
+                alert(result.message);
+                window.location.href = "index.html";  // Redirect after successful login
+            } else {
+                alert(result.message);
+            }
         });
     </script>
+
+
 </body>
 
 </html>

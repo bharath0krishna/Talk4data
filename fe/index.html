@@ -248,7 +248,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <a href="#">🏠 Home</a>
+        <a href="home.html">🏠 Home</a>
         <a href="#">👤 User</a>
         <a href="login.html" id="authLink">🔐 Login/Signup</a>
     </div>
@@ -369,13 +369,13 @@
         // Handle Login/Signup or Sign Out
         document.addEventListener("DOMContentLoaded", function () {
             let authLink = document.getElementById("authLink");
-            let isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if user is logged in
+            let isLoggedIn = sessionStorage.getItem("loggedIn") === "true"; // Check login state
 
             if (isLoggedIn) {
                 authLink.textContent = "🚪 Sign Out";
                 authLink.href = "#"; // Prevent redirection
                 authLink.addEventListener("click", function () {
-                    localStorage.setItem("isLoggedIn", "false"); // Set logout state
+                    sessionStorage.setItem("loggedIn", "false"); // Set logout state
                     location.reload(); // Refresh page to update UI
                 });
             } else {
@@ -383,7 +383,6 @@
                 authLink.href = "login.html"; // Redirect to login page
             }
         });
-
 
 
     </script>
